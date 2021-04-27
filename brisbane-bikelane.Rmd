@@ -1,0 +1,43 @@
+---
+title: "Brisbane Bikelane"
+author: "jafshin"
+date: "26/04/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(sf)
+library(dplyr)
+
+```
+
+## This algorithm reads the provided bike network for brisbane and adds elevation and then slope to it as a road attribute.
+
+```{r Reading the road network}
+
+Network <- st_read("./data/BikeLane/Bike_2016_BNE.shp") %>% 
+  st_transform(28355)
+
+
+NetworkCasted <- st_cast(Network, "LINESTRING")
+NetworkEnd  <- st_line_sample(NetworkCasted, sample=1)
+NetworkBegining  <- st_line_sample(NetworkCasted, sample=0)
+st_write(NetworkCasted,"NetworkCasted.sqlite", delete_layer = T)
+st_write(NetworkEnd,"NetworkEnd.sqlite", delete_layer = T)
+st_write(NetworkBegining,"NetworkBegining.sqlite", delete_layer = T)
+
+
+
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
